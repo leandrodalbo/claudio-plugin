@@ -1,0 +1,56 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.edit_hook" }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.shell_before_hook" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.shell_after_hook" }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.shell_after_hook" }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.where_we_are_hook" }
+        ]
+      }
+    ],
+    "UserPromptExpansion": [
+      {
+        "matcher": "^claudio:(init|next|back|status)$",
+        "hooks": [
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.tdcg_command_hook", "onFailure": "block" }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.where_we_are_hook" }
+        ]
+      }
+    ]
+  }
+}

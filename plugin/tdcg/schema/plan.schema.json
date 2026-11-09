@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Claudio TDCG plan",
+  "description": "An object with title, status, goal and cycles: the plan for a piece of work.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "status", "goal", "cycles"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Text: where editors find this schema, e.g. \"./plan.schema.json\"."
+    },
+    "title": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9]+( [A-Za-z0-9]+)*(?![\\s\\S])",
+      "description": "Letters, digits and single spaces only. Becomes the file name in .tdcg/done/."
+    },
+    "status": {
+      "enum": ["active", "done"],
+      "description": "Either \"active\" or \"done\"."
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What we build and why, in a few lines. Not empty."
+    },
+    "cycles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/cycle" },
+      "description": "A list of at least one cycle, in order. The current one is the first with done: false."
+    }
+  },
+  "$defs": {
+    "cycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "what", "done", "notes", "files"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*[a-z]?(?![\\s\\S])",
+          "description": "A number from 1, optionally with one lowercase letter: \"1\", \"2\", \"2b\". Unique."
+        },
+        "what": {
+          "type": "string",
+          "minLength": 1,
+          "description": "What this cycle builds, in a few words. Not empty."
+        },
+        "done": {
+          "type": "boolean",
+          "description": "true or false. Set by the tool after COMMIT, never by hand."
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "A list of text: details and edge cases, enough to start SPECIFY. The tool also adds a line here when the user skips a phase."
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "description": "A list of at least one file pattern this cycle may change, e.g. \"tdcg/core/*.py\". Paths start from the project folder."
+        },
+        "type": {
+          "enum": ["behaviour", "coverage", "refactor", "documentation", "setup", "spike"],
+          "description": "One of \"behaviour\", \"coverage\", \"refactor\", \"documentation\", \"setup\", \"spike\". Optional, default \"behaviour\". Sets the cycle's phases: \"behaviour\" and \"coverage\" start with tests (RED); the others go SPECIFY → PROMPT → GREEN with tests locked."
+        }
+      }
+    }
+  }
+}
