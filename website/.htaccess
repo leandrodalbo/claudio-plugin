@@ -1,0 +1,9 @@
+# no-store (not just no-cache): no-cache still lets the browser serve a
+# stale snapshot from bfcache on back/forward navigation, skipping the
+# network entirely. This is a small, frequently-updated static site, so
+# freshness matters more than the conditional-GET savings no-store gives up.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js)$">
+    Header set Cache-Control "no-store"
+  </FilesMatch>
+</IfModule>
