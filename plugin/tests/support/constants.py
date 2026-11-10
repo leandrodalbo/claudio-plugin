@@ -188,8 +188,8 @@ _RUN_WHERE_WE_ARE = {"type": "command", "command": _RUN_MODULE + "tdcg.hooks.whe
 _RUN_VENV_SETUP = {"type": "command", "command": _RUN_MODULE + "tdcg.setup.venv_setup"}
 # The command hook needs jsonschema: set up the venv first, then run the hook with its Python
 _RUN_COMMAND_HOOK = (
-    'cd "${CLAUDE_PLUGIN_ROOT}" && python3 -m tdcg.setup.venv_setup && '
-    '"${CLAUDE_PLUGIN_DATA}/venv/bin/python3" -m tdcg.hooks.tdcg_command_hook'
+    _RUN_VENV_SETUP["command"]
+    + ' && "${CLAUDE_PLUGIN_DATA}/venv/bin/python3" -m tdcg.hooks.tdcg_command_hook'
 )
 _RUN_SHELL_AFTER = {"type": "command", "command": _RUN_MODULE + "tdcg.hooks.shell_after_hook"}
 EXPECTED_HOOKS_FILE = {
@@ -245,7 +245,18 @@ EXPECTED_MANIFEST = {
     "license": "Apache-2.0",
     "homepage": _REPO_URL,
     "repository": _REPO_URL,
-    "keywords": ["tdd", "tdcg", "xp", "guard-rails", "hooks"],
+    "keywords": [
+        "tdd",
+        "tdcg",
+        "xp",
+        "clean-code",
+        "clean-architecture",
+        "solid",
+        "ai-assisted-development",
+        "claude-code",
+        "guard-rails",
+        "hooks",
+    ],
 }
 EXPECTED_MARKETPLACE = {
     "name": "claudio-plugin",
@@ -265,9 +276,17 @@ EXPECTED_REQUIREMENTS = [
 
 # The plugin's own venv (5.1)
 PLUGIN_DATA_VARIABLE = "CLAUDE_PLUGIN_DATA"
+SETUP_MODULE = "tdcg.setup.venv_setup"
 VENV_DIR = "venv"
 VENV_PYTHON = "venv/bin/python3"
+VENV_BIN_PYTHON = "bin/python3"
+GONE_PYTHON = "python3.gone"
+NEW_DATA_DIR = "data"
+FILE_IN_THE_WAY = "a-file"
 DONE_MARK = "requirements.txt"
+# The done mark: the Python version that built the venv (major.minor), then the requirements
+DONE_MARK_PYTHON_LINE = "python {version}\n"
+OTHER_PYTHON_VERSION = "3.0"
 OLD_REQUIREMENTS = "jsonschema==4.0.0\n"
 OLD_VENV_FILE = "venv/left-from-before.txt"
 VENV_SETUP_FAILED = (

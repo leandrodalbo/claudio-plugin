@@ -12,6 +12,8 @@ from pathlib import Path
 from tdcg.core import messages
 from tdcg.core.constants import (
     BLOCK_EXIT_CODE,
+    DONE_MARK_PYTHON_LINE,
+    ENCODING,
     MAKE_VENV,
     PIP_INSTALL,
     PLUGIN_DATA_VARIABLE,
@@ -43,15 +45,23 @@ def ensure_venv(data: Path, build: Callable[[Path, Path], None] = build_venv) ->
     shutil.rmtree(venv, ignore_errors=True)
     data.mkdir(parents=True, exist_ok=True)
     build(venv, REQUIREMENTS_PATH)
-    shutil.copyfile(REQUIREMENTS_PATH, mark)
+    mark.write_text(_build_done_mark(), encoding=ENCODING)
 
 
 def _is_ready(venv: Path, mark: Path) -> bool:
     """The venv's python3 is there (a link to a Python that is gone counts as missing) and it was
-    built from the plugin's requirements.txt as it is now."""
+    built by this Python version from the plugin's requirements.txt as it is now."""
     if not venv.joinpath(*VENV_PYTHON).exists() or not mark.exists():
         return False
-    return mark.read_bytes() == REQUIREMENTS_PATH.read_bytes()
+    return mark.read_text(encoding=ENCODING) == _build_done_mark()
+
+
+def _build_done_mark() -> str:
+    """The Python running this is the one that makes the venv. Only major.minor: a patch upgrade
+    keeps the venv's libraries working; a minor one doesn't (they sit in lib/python3.X/)."""
+    version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    python_line = DONE_MARK_PYTHON_LINE.format(version=version)
+    return python_line + REQUIREMENTS_PATH.read_text(encoding=ENCODING)
 
 
 def _run_step(step: str, command: list[str]) -> None:

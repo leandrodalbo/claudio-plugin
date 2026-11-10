@@ -9,5 +9,16 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/leandrodalbo/claudio-plugin",
   "repository": "https://github.com/leandrodalbo/claudio-plugin",
-  "keywords": ["tdd", "tdcg", "xp", "guard-rails", "hooks"]
+  "keywords": [
+    "tdd",
+    "tdcg",
+    "xp",
+    "clean-code",
+    "clean-architecture",
+    "solid",
+    "ai-assisted-development",
+    "claude-code",
+    "guard-rails",
+    "hooks"
+  ]
 }
