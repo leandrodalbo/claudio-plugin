@@ -64,7 +64,7 @@
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
           </a>
         </span>
-        <a href="#top" class="rounded bg-rooster px-5 py-2.5 text-white shadow transition hover:bg-ink">Install</a>
+        <a href="#install" class="rounded bg-rooster px-5 py-2.5 text-white shadow transition hover:bg-ink">Install</a>
       </nav>
       <button id="navToggle" aria-label="Open menu" aria-expanded="false" class="p-2 md:hidden">
         <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
@@ -80,21 +80,94 @@
         <a href="https://discord.gg/AjyKgTbNtr" target="_blank" rel="noopener" class="flex-1 rounded border border-ink/20 py-3 text-center">Discord</a>
         <a href="https://x.com/claudioxpplugin" target="_blank" rel="noopener" class="flex-1 rounded border border-ink/20 py-3 text-center">X</a>
       </div>
-      <a href="#top" class="mt-2 rounded bg-rooster px-5 py-3 text-center text-white">Install</a>
+      <a href="#install" class="mt-2 rounded bg-rooster px-5 py-3 text-center text-white">Install</a>
     </nav>
   </header>
 
   <!-- ============ 1. HERO ============ -->
-  <section id="top" class="scroll-mt-20 bg-ink py-24 text-white">
-    <div class="mx-auto max-w-6xl px-5">
-      <h1 class="font-display text-4xl font-extrabold md:text-5xl">Hero</h1>
+  <section id="top" class="scroll-mt-20 bg-ink pb-20 pt-16 text-white">
+    <div class="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div class="min-w-0">
+        <h1 class="font-display text-4xl font-extrabold leading-[1.08] md:text-5xl">
+          Embrace change without <span class="text-rooster">losing control</span>.
+        </h1>
+        <p class="mt-6 max-w-lg text-lg leading-relaxed text-white/80">
+          Guard rails for Claude Code. Claude types fast; you decide what ships.
+        </p>
+
+        <div id="install" class="mt-8 scroll-mt-24">
+          <p class="text-xs font-bold tracking-[0.2em] text-white/60">INSTALL</p>
+          <div class="mt-3 space-y-3">
+            <div class="flex items-center gap-2 rounded bg-inkdeep p-2 pl-4">
+              <pre class="min-w-0 flex-1 overflow-x-auto py-1 text-sm"><code>claude plugin marketplace add leandrodalbo/claudio-plugin</code></pre>
+              <button type="button" data-copy class="shrink-0 rounded bg-white/10 px-3 py-2 text-xs font-bold transition hover:bg-rooster">Copy</button>
+            </div>
+            <div class="flex items-center gap-2 rounded bg-inkdeep p-2 pl-4">
+              <pre class="min-w-0 flex-1 overflow-x-auto py-1 text-sm"><code>claude plugin install claudio@claudio-plugin</code></pre>
+              <button type="button" data-copy class="shrink-0 rounded bg-white/10 px-3 py-2 text-xs font-bold transition hover:bg-rooster">Copy</button>
+            </div>
+          </div>
+          <p class="mt-3 text-sm text-white/60">Needs Claude Code, git and Python 3.11+. Then run <code class="text-white">/claudio:init</code> in your project.</p>
+        </div>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="https://github.com/leandrodalbo/claudio-plugin" target="_blank" rel="noopener" class="rounded bg-rooster px-6 py-3 font-display text-lg font-bold shadow-lg transition hover:bg-white hover:text-ink">GitHub</a>
+          <a href="https://discord.gg/AjyKgTbNtr" target="_blank" rel="noopener" class="rounded border-2 border-white/30 px-6 py-3 font-display text-lg font-bold transition hover:border-rooster hover:text-rooster">Discord</a>
+          <a href="https://x.com/claudioxpplugin" target="_blank" rel="noopener" class="rounded border-2 border-white/30 px-6 py-3 font-display text-lg font-bold transition hover:border-rooster hover:text-rooster">X</a>
+        </div>
+      </div>
+
+      <!-- DEMO -->
+      <div class="min-w-0">
+        <div role="group" aria-label="Demo language" class="mb-3 flex gap-2 text-sm font-bold">
+          <button type="button" data-demo="java" aria-pressed="true" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">Java · IntelliJ</button>
+          <button type="button" data-demo="typescript" aria-pressed="false" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">TypeScript · VS Code</button>
+        </div>
+        <video id="demo-java" class="w-full rounded-lg shadow-2xl" width="1280" height="548" poster="assets/demo-java-says-no.jpg" controls autoplay muted loop playsinline aria-label="Demo in Java: Claude tries to skip ahead, and ClaudioXP says no">
+          <source src="assets/demo-java-says-no.mp4" type="video/mp4">
+        </video>
+        <video id="demo-typescript" class="hidden w-full rounded-lg shadow-2xl" width="1280" height="550" poster="assets/demo-typescript-says-no.jpg" preload="none" controls muted loop playsinline aria-label="Demo in TypeScript: Claude tries to skip ahead, and ClaudioXP says no">
+          <source src="assets/demo-typescript-says-no.mp4" type="video/mp4">
+        </video>
+      </div>
     </div>
   </section>
 
   <!-- ============ 2. WHO IT'S FOR ============ -->
-  <section id="who" class="scroll-mt-20 bg-mist py-24">
+  <section id="who" class="scroll-mt-20 bg-mist py-16">
     <div class="mx-auto max-w-6xl px-5">
-      <h2 class="font-display text-4xl font-extrabold md:text-5xl">Who it's for</h2>
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">Who it's for</h2>
+      <p class="fade-up mt-3 max-w-2xl text-slateink">ClaudioXP is for software engineers who want AI's speed and keep responsibility for what they ship.</p>
+      <div class="mt-10 grid gap-x-10 gap-y-8 md:grid-cols-2">
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster font-display text-xl font-extrabold text-white">1</span>
+          <div>
+            <h3 class="font-display text-xl font-bold">You need the fundamentals.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">It guides an engineer; it does not stand in for one. If you can't judge a change, ClaudioXP can't help you.</p>
+          </div>
+        </div>
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster font-display text-xl font-extrabold text-white">2</span>
+          <div>
+            <h3 class="font-display text-xl font-bold">Know your paradigm.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">Object-oriented, functional or structured, and why.</p>
+          </div>
+        </div>
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster font-display text-xl font-extrabold text-white">3</span>
+          <div>
+            <h3 class="font-display text-xl font-bold">You don't need to be an expert in the language.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">Bring the engineering know-how, and ask Claude to explain the language as you go.</p>
+          </div>
+        </div>
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster font-display text-xl font-extrabold text-white">4</span>
+          <div>
+            <h3 class="font-display text-xl font-bold">It is not for "vibe" coding.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">Every cycle stops for your decision: the spec, the tests, the review, the commit.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -167,6 +240,34 @@
     mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
       mobileNav.classList.add('hidden'); mobileNav.classList.remove('flex');
       toggle.setAttribute('aria-expanded', 'false');
+    }));
+
+    const copyLabels = { ready: 'Copy', done: 'Copied', blocked: 'Select it and copy' };
+    const copyLabelMs = 2000;
+    document.querySelectorAll('[data-copy]').forEach(button => {
+      let resetTimer;
+      button.addEventListener('click', async () => {
+        const command = button.parentElement.querySelector('code').textContent;
+        try {
+          await navigator.clipboard.writeText(command);
+          button.textContent = copyLabels.done;
+        } catch {
+          button.textContent = copyLabels.blocked;
+        }
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => { button.textContent = copyLabels.ready; }, copyLabelMs);
+      });
+    });
+
+    const demoButtons = document.querySelectorAll('[data-demo]');
+    demoButtons.forEach(picked => picked.addEventListener('click', () => {
+      demoButtons.forEach(button => {
+        const isPicked = button === picked;
+        const video = document.getElementById('demo-' + button.dataset.demo);
+        button.setAttribute('aria-pressed', String(isPicked));
+        video.classList.toggle('hidden', !isPicked);
+        if (isPicked) { video.play(); } else { video.pause(); }
+      });
     }));
 
     const io = new IntersectionObserver(entries => {
