@@ -38,6 +38,13 @@
     .fade-up { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
     .fade-up.in { opacity: 1; transform: none; }
     .icon-line { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    /* Loop arrows: down on a phone, none on a tablet (2 columns), right on desktop except at the row end. */
+    .loop > li:not(:last-child)::after { content: '\2193'; display: block; margin-top: .5rem; text-align: center; font-weight: 800; opacity: .4; }
+    @media (min-width: 768px) { .loop > li:not(:last-child)::after { content: none; } }
+    @media (min-width: 1024px) {
+      /* top = card padding (p-6, 1.5rem) + half the number square (h-10, 1.25rem), so the arrow sits level with it. */
+      .loop > li:not(:last-child):not(:nth-child(4))::after { content: '\2192'; position: absolute; top: calc(1.5rem + 1.25rem); right: -1.5rem; margin: 0; transform: translateY(-50%); }
+    }
   </style>
 </head>
 <body class="bg-white font-body text-ink antialiased">
@@ -49,6 +56,7 @@
     <symbol id="icon-x" viewBox="0 0 24 24"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></symbol>
     <symbol id="icon-speed" viewBox="0 0 24 24"><g class="icon-line"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></g></symbol>
     <symbol id="icon-craft" viewBox="0 0 24 24"><g class="icon-line"><path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9"/><path d="m18 15 4-4"/><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"/></g></symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24"><g class="icon-line"><path d="m6 9 6 6 6-6"/></g></symbol>
     <symbol id="icon-control" viewBox="0 0 24 24"><g class="icon-line"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5"/></g></symbol>
   </svg>
 
@@ -273,7 +281,139 @@
   <!-- ============ 6. HOW IT WORKS ============ -->
   <section id="how" class="scroll-mt-20 bg-mist py-24">
     <div class="mx-auto max-w-6xl px-5">
-      <h2 class="font-display text-4xl font-extrabold md:text-5xl">How it works</h2>
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">How it works</h2>
+      <p class="fade-up mt-4 max-w-2xl leading-relaxed text-slateink">Work moves in small cycles. Each phase lets Claude do one kind of work, and only you move on. Open a phase to see what it allows.</p>
+
+      <p class="fade-up mt-12 text-xs font-bold uppercase tracking-[0.2em] text-slateink">Once per plan</p>
+      <div class="fade-up mt-3 max-w-sm">
+        <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+          <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">1</span>
+            <span class="flex-1 font-display text-xl font-bold">PLAN</span>
+            <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+          </summary>
+          <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+            <div><dt class="font-bold text-ink">Claude may</dt><dd>change only the plan and the config.</dd></div>
+            <div><dt class="font-bold text-ink">You decide</dt><dd>when the plan is right.</dd></div>
+          </dl>
+        </details>
+      </div>
+
+      <p class="fade-up mt-12 text-xs font-bold uppercase tracking-[0.2em] text-slateink">&#8635; Every cycle</p>
+      <ol class="loop mt-3 grid items-start gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">2</span>
+              <span class="flex-1 font-display text-xl font-bold">SPECIFY</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>read and ask questions. It changes nothing.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>the behaviour, in one or two sentences.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">3</span>
+              <span class="flex-1 font-display text-xl font-bold">RED</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>write tests only, in the cycle's files.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>when to move on. Your tests must <strong>fail</strong> (pass in a coverage cycle).</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">4</span>
+              <span class="flex-1 font-display text-xl font-bold">PROMPT</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>suggest a file to follow. It changes nothing.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>the pattern, or &ldquo;no pattern&rdquo;.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">5</span>
+              <span class="flex-1 font-display text-xl font-bold">GREEN</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>write code only. Tests are locked.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>when to move on. Your tests must <strong>pass</strong>.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">6</span>
+              <span class="flex-1 font-display text-xl font-bold">REVIEW</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>read and comment. It changes nothing.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>what to fix.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">7</span>
+              <span class="flex-1 font-display text-xl font-bold">REFACTOR</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>clean up the code. Tests stay locked.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>when to move on. Tests must still pass.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">8</span>
+              <span class="flex-1 font-display text-xl font-bold">COMMIT</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>suggest the message. Git is read-only for Claude.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>the commit. You make it.</dd></div>
+            </dl>
+          </details>
+        </li>
+      </ol>
+
+      <h3 class="fade-up mt-16 font-display text-2xl font-bold">Cycle types</h3>
+      <p class="fade-up mt-2 max-w-2xl text-sm leading-relaxed text-slateink">Each cycle in the plan has a type. The type sets the route.</p>
+      <div class="mt-6 grid gap-6 md:grid-cols-3">
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h4 class="font-display text-lg font-bold">behaviour</h4>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">The full loop. RED expects new tests that <strong>fail</strong>.</p>
+        </div>
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h4 class="font-display text-lg font-bold">coverage</h4>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">The full loop. RED expects tests for what already works, that <strong>pass</strong>.</p>
+        </div>
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h4 class="font-display text-lg font-bold">refactor &middot; documentation &middot; setup &middot; spike</h4>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">No RED. Tests stay locked the whole cycle.</p>
+        </div>
+      </div>
+      <p class="fade-up mt-8 text-sm text-slateink">Only you can skip, and only REVIEW and REFACTOR.</p>
+      <div class="fade-up mt-6">
+        <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/docs/phases.md" target="_blank" rel="noopener" class="inline-block rounded border-2 border-ink/20 px-6 py-3 font-display font-bold transition hover:border-rooster hover:text-rooster">All the rules: docs/phases.md</a>
+      </div>
     </div>
   </section>
 
