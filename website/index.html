@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaudioXP · Apply XP, embrace AI, ship software you trust</title>
+  <meta name="description" content="ClaudioXP is a free Claude Code plugin that puts guard rails on AI coding: test first, small steps, and you decide what ships.">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://claudioxp.dev/">
+  <meta property="og:title" content="ClaudioXP · Apply XP, embrace AI, ship software you trust">
+  <meta property="og:description" content="A free Claude Code plugin: test first, small steps, and you decide what ships.">
+  <meta property="og:image" content="https://claudioxp.dev/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ClaudioXP: Embrace change without losing control.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://claudioxp.dev/">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#1C1D2D',
+            inkdeep: '#12131F',
+            rooster: '#CB2018',
+            mist: '#F3F4F6',
+            slateink: '#3d4d63',
+          },
+          fontFamily: {
+            display: ['"Plus Jakarta Sans"', 'sans-serif'],
+            body: ['"Inter"', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .fade-up { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-up.in { opacity: 1; transform: none; }
+    .icon-line { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    /* Loop arrows: down on a phone, none on a tablet (2 columns), right on desktop except at the row end. */
+    .loop > li:not(:last-child)::after { content: '\2193'; display: block; margin-top: .5rem; text-align: center; font-weight: 800; opacity: .4; }
+    @media (min-width: 768px) { .loop > li:not(:last-child)::after { content: none; } }
+    @media (min-width: 1024px) {
+      /* top = card padding (p-6, 1.5rem) + half the number square (h-10, 1.25rem), so the arrow sits level with it. */
+      .loop > li:not(:last-child):not(:nth-child(4))::after { content: '\2192'; position: absolute; top: calc(1.5rem + 1.25rem); right: -1.5rem; margin: 0; transform: translateY(-50%); }
+    }
+  </style>
+</head>
+<body class="bg-white font-body text-ink antialiased">
+
+  <!-- ============ ICONS (one source, used with <use href="#icon-...">). Sources and licences: LICENSE-icons ============ -->
+  <svg width="0" height="0" class="absolute" aria-hidden="true">
+    <symbol id="icon-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+    <symbol id="icon-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24"><path fill="currentColor" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></symbol>
+    <symbol id="icon-speed" viewBox="0 0 24 24"><g class="icon-line"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></g></symbol>
+    <symbol id="icon-craft" viewBox="0 0 24 24"><g class="icon-line"><path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9"/><path d="m18 15 4-4"/><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"/></g></symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24"><g class="icon-line"><path d="m6 9 6 6 6-6"/></g></symbol>
+    <symbol id="icon-control" viewBox="0 0 24 24"><g class="icon-line"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5"/></g></symbol>
+  </svg>
+
+  <!-- ============ NAV ============ -->
+  <header class="sticky top-0 z-50 border-b border-ink/10 bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
+      <a href="#top" class="flex items-center gap-2">
+        <img src="assets/logo.png" alt="" width="30" height="44" class="h-11 w-auto">
+        <span class="font-display text-xl font-extrabold leading-none">Claudio<span class="text-rooster">XP</span></span>
+      </a>
+      <nav class="hidden items-center gap-5 text-sm lg:gap-7 font-semibold tracking-wide md:flex">
+        <a href="#how" class="transition hover:text-rooster">How it works</a>
+        <a href="#craft" class="transition hover:text-rooster">The craft</a>
+        <a href="#value" class="transition hover:text-rooster">Value</a>
+        <a href="#demos" class="transition hover:text-rooster">Demos</a>
+        <span class="flex items-center gap-4">
+          <a href="https://github.com/leandrodalbo/claudio-plugin" target="_blank" rel="noopener" aria-label="GitHub" class="transition hover:text-rooster">
+            <svg class="h-5 w-5" aria-hidden="true"><use href="#icon-github"/></svg>
+          </a>
+          <a href="https://discord.gg/AjyKgTbNtr" target="_blank" rel="noopener" aria-label="Discord" class="transition hover:text-rooster">
+            <svg class="h-5 w-5" aria-hidden="true"><use href="#icon-discord"/></svg>
+          </a>
+          <a href="https://x.com/claudioxpplugin" target="_blank" rel="noopener" aria-label="X" class="transition hover:text-rooster">
+            <svg class="h-5 w-5" aria-hidden="true"><use href="#icon-x"/></svg>
+          </a>
+        </span>
+        <a href="#install" class="rounded bg-rooster px-5 py-2.5 text-white shadow transition hover:bg-ink">Install</a>
+      </nav>
+      <button id="navToggle" aria-label="Open menu" aria-expanded="false" class="p-2 md:hidden">
+        <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+      </button>
+    </div>
+    <nav id="mobileNav" class="hidden flex-col border-t border-ink/10 bg-white px-5 pb-5 pt-2 text-sm font-semibold tracking-wide md:hidden">
+      <a href="#how" class="py-3">How it works</a>
+      <a href="#craft" class="py-3">The craft</a>
+      <a href="#value" class="py-3">Value</a>
+      <a href="#demos" class="py-3">Demos</a>
+      <div class="flex gap-3 py-3">
+        <a href="https://github.com/leandrodalbo/claudio-plugin" target="_blank" rel="noopener" class="flex-1 rounded border border-ink/20 py-3 text-center">GitHub</a>
+        <a href="https://discord.gg/AjyKgTbNtr" target="_blank" rel="noopener" class="flex-1 rounded border border-ink/20 py-3 text-center">Discord</a>
+        <a href="https://x.com/claudioxpplugin" target="_blank" rel="noopener" class="flex-1 rounded border border-ink/20 py-3 text-center">X</a>
+      </div>
+      <a href="#install" class="mt-2 rounded bg-rooster px-5 py-3 text-center text-white">Install</a>
+    </nav>
+  </header>
+
+  <!-- ============ 1. HERO ============ -->
+  <section id="top" class="scroll-mt-20 bg-ink pb-20 pt-16 text-white">
+    <div class="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div class="min-w-0">
+        <h1 class="font-display text-4xl font-extrabold leading-[1.08] md:text-5xl">
+          Embrace change without <span class="text-rooster">losing control</span>.
+        </h1>
+        <p class="mt-6 max-w-lg text-lg leading-relaxed text-white/80">
+          Guard rails for Claude Code. Claude types fast; you decide what ships.
+        </p>
+
+        <div id="install" class="mt-8 scroll-mt-24">
+          <p class="text-xs font-bold tracking-[0.2em] text-white/60">INSTALL</p>
+          <div class="mt-3 space-y-3">
+            <div class="flex items-center gap-2 rounded bg-inkdeep p-2 pl-4">
+              <pre class="min-w-0 flex-1 overflow-x-auto py-1 text-sm"><code>claude plugin marketplace add leandrodalbo/claudio-plugin</code></pre>
+              <button type="button" data-copy class="shrink-0 rounded bg-white/10 px-3 py-2 text-xs font-bold transition hover:bg-rooster">Copy</button>
+            </div>
+            <div class="flex items-center gap-2 rounded bg-inkdeep p-2 pl-4">
+              <pre class="min-w-0 flex-1 overflow-x-auto py-1 text-sm"><code>claude plugin install claudio@claudio-plugin</code></pre>
+              <button type="button" data-copy class="shrink-0 rounded bg-white/10 px-3 py-2 text-xs font-bold transition hover:bg-rooster">Copy</button>
+            </div>
+          </div>
+          <p class="mt-3 text-sm text-white/60">Needs Claude Code, git and Python 3.11+. Then run <code class="text-white">/claudio:init</code> in your project.</p>
+        </div>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="https://github.com/leandrodalbo/claudio-plugin" target="_blank" rel="noopener" class="rounded bg-rooster px-6 py-3 font-display text-lg font-bold shadow-lg transition hover:bg-white hover:text-ink">GitHub</a>
+          <a href="https://discord.gg/AjyKgTbNtr" target="_blank" rel="noopener" class="rounded border-2 border-white/30 px-6 py-3 font-display text-lg font-bold transition hover:border-rooster hover:text-rooster">Discord</a>
+          <a href="https://x.com/claudioxpplugin" target="_blank" rel="noopener" class="rounded border-2 border-white/30 px-6 py-3 font-display text-lg font-bold transition hover:border-rooster hover:text-rooster">X</a>
+        </div>
+      </div>
+
+      <!-- DEMO -->
+      <div class="min-w-0">
+        <div role="group" aria-label="Demo language" data-toggle class="mb-3 flex gap-2 text-sm font-bold">
+          <button type="button" data-pick="java" aria-pressed="true" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">Java · IntelliJ</button>
+          <button type="button" data-pick="typescript" aria-pressed="false" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">TypeScript · VS Code</button>
+        </div>
+        <video data-panel="java" data-autoplay class="w-full rounded-lg shadow-2xl" width="1280" height="548" poster="assets/demo-java-says-no.jpg" controls autoplay muted loop playsinline aria-label="Demo in Java: Claude tries to skip ahead, and ClaudioXP says no">
+          <source src="assets/demo-java-says-no.mp4" type="video/mp4">
+        </video>
+        <video data-panel="typescript" data-autoplay class="hidden w-full rounded-lg shadow-2xl" width="1280" height="550" poster="assets/demo-typescript-says-no.jpg" preload="none" controls muted loop playsinline aria-label="Demo in TypeScript: Claude tries to skip ahead, and ClaudioXP says no">
+          <source src="assets/demo-typescript-says-no.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. WHO IT'S FOR ============ -->
+  <section id="who" class="scroll-mt-20 bg-mist py-16">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">Who it's for</h2>
+      <p class="fade-up mt-3 max-w-2xl text-slateink">ClaudioXP is for software engineers who want AI's speed and keep responsibility for what they ship.</p>
+      <div class="mt-10 grid gap-x-10 gap-y-8 md:grid-cols-2">
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster font-display text-xl font-extrabold text-white">1</span>
+          <div>
+            <h3 class="font-display text-xl font-bold">You need the fundamentals.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">It guides an engineer; it does not stand in for one. If you can't judge a change, ClaudioXP can't help you.</p>
+          </div>
+        </div>
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster font-display text-xl font-extrabold text-white">2</span>
+          <div>
+            <h3 class="font-display text-xl font-bold">Know your paradigm.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">Object-oriented, functional or structured, and why.</p>
+          </div>
+        </div>
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster font-display text-xl font-extrabold text-white">3</span>
+          <div>
+            <h3 class="font-display text-xl font-bold">You don't need to be an expert in the language.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">Bring the engineering know-how, and ask Claude to explain the language as you go.</p>
+          </div>
+        </div>
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster font-display text-xl font-extrabold text-white">4</span>
+          <div>
+            <h3 class="font-display text-xl font-bold">It is not for "vibe" coding.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">Every cycle stops for your decision: the spec, the tests, the review, the commit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. THE SPIRIT ============ -->
+  <section id="spirit" class="scroll-mt-20 py-24">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">The spirit</h2>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-7">
+          <h3 class="font-display text-2xl font-bold leading-snug">The value is in the problem solved, not in the code written.</h3>
+          <p class="mt-3 text-sm leading-relaxed text-slateink">Code is cheap now. What counts is the right problem, solved well.</p>
+        </div>
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-7">
+          <h3 class="font-display text-2xl font-bold leading-snug">Embrace change.</h3>
+          <p class="mt-3 text-sm leading-relaxed text-slateink">New tools are here. Use them, keep the craft, and keep creating value.</p>
+        </div>
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-7">
+          <h3 class="font-display text-2xl font-bold leading-snug">No "vibing": knowledge and experience are required.</h3>
+          <p class="mt-3 text-sm leading-relaxed text-slateink">You judge every change. Your experience is what makes the result good.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. JOIN THE COMMUNITY ============ -->
+  <section id="community" class="scroll-mt-20 bg-ink py-24 text-white">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">Join the community</h2>
+      <p class="fade-up mt-3 max-w-2xl text-white/80">ClaudioXP is free and open source. It gets better with every engineer who uses it.</p>
+      <ul class="mt-12 grid gap-6 md:grid-cols-3">
+        <li class="fade-up flex flex-col rounded-lg bg-white/5 p-6">
+          <p class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-rooster"><svg class="h-5 w-5" aria-hidden="true"><use href="#icon-discord"/></svg>Discord</p>
+          <h3 class="mt-3 font-display text-2xl font-bold">Talk with us</h3>
+          <p class="mt-2 text-sm leading-relaxed text-white/85">Ask questions and share how you use it.</p>
+          <div class="mt-auto pt-6">
+            <a href="https://discord.gg/AjyKgTbNtr" target="_blank" rel="noopener" class="block rounded bg-rooster px-5 py-3 text-center font-display font-bold transition hover:bg-white hover:text-ink">Join the Discord</a>
+          </div>
+        </li>
+        <li class="fade-up flex flex-col rounded-lg bg-white/5 p-6">
+          <p class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-rooster"><svg class="h-5 w-5" aria-hidden="true"><use href="#icon-x"/></svg>X @claudioxpplugin</p>
+          <h3 class="mt-3 font-display text-2xl font-bold">Follow the news</h3>
+          <p class="mt-2 text-sm leading-relaxed text-white/85">News and new releases.</p>
+          <div class="mt-auto pt-6">
+            <a href="https://x.com/claudioxpplugin" target="_blank" rel="noopener" class="block rounded border-2 border-white/30 px-5 py-3 text-center font-display font-bold transition hover:border-rooster hover:text-rooster">Follow on X</a>
+          </div>
+        </li>
+        <li class="fade-up flex flex-col rounded-lg bg-white/5 p-6">
+          <p class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-rooster"><svg class="h-5 w-5" aria-hidden="true"><use href="#icon-github"/></svg>GitHub</p>
+          <h3 class="mt-3 font-display text-2xl font-bold">Build it with us</h3>
+          <p class="mt-2 text-sm leading-relaxed text-white/85">Star the repo, open an issue, send a pull request, or share the rules you add to your copy.</p>
+          <div class="mt-auto flex flex-col gap-3 pt-6">
+            <a href="https://github.com/leandrodalbo/claudio-plugin" target="_blank" rel="noopener" class="block rounded border-2 border-white/30 px-5 py-3 text-center font-display font-bold transition hover:border-rooster hover:text-rooster">Star on GitHub</a>
+            <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" class="block rounded border-2 border-white/30 px-5 py-3 text-center font-display font-bold transition hover:border-rooster hover:text-rooster">Contributing</a>
+          </div>
+        </li>
+      </ul>
+      <p class="fade-up mt-10 text-center text-sm text-white/60">Free and open source, <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/LICENSE" target="_blank" rel="noopener" class="underline decoration-rooster underline-offset-4 transition hover:text-white">Apache 2.0</a>.</p>
+    </div>
+  </section>
+
+  <!-- ============ 5. THE POSITIVE STORY ============ -->
+  <section id="story" class="scroll-mt-20 py-24">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">Apply XP. Embrace AI. Ship software you trust.</h2>
+      <p class="fade-up mt-4 max-w-2xl leading-relaxed text-slateink">Extreme Programming gave us small steps, tests first and fast feedback. Claude gives us speed. ClaudioXP brings them together, so you don't have to choose.</p>
+      <div class="mt-12 grid gap-x-10 gap-y-8 lg:grid-cols-3">
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster"><svg class="h-6 w-6 text-white" aria-hidden="true"><use href="#icon-speed"/></svg></span>
+          <div>
+            <h3 class="font-display text-xl font-bold">Keep the speed.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">Claude writes the code fast: the tests you agreed, the implementation, the clean-up.</p>
+          </div>
+        </div>
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster"><svg class="h-6 w-6 text-white" aria-hidden="true"><use href="#icon-craft"/></svg></span>
+          <div>
+            <h3 class="font-display text-xl font-bold">Keep the craft.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">Test first, small steps, refactor. The habits from XP, built into every cycle.</p>
+          </div>
+        </div>
+        <div class="fade-up flex gap-5">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-rooster"><svg class="h-6 w-6 text-white" aria-hidden="true"><use href="#icon-control"/></svg></span>
+          <div>
+            <h3 class="font-display text-xl font-bold">Keep control.</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slateink">You move every phase and you make every commit. You decide what ships.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. HOW IT WORKS ============ -->
+  <section id="how" class="scroll-mt-20 bg-mist py-24">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">How it works</h2>
+      <p class="fade-up mt-4 max-w-2xl leading-relaxed text-slateink">Work moves in small cycles. Each phase lets Claude do one kind of work, and only you move on. Open a phase to see what it allows.</p>
+
+      <p class="fade-up mt-12 text-xs font-bold uppercase tracking-[0.2em] text-slateink">Once per plan</p>
+      <div class="fade-up mt-3 max-w-sm">
+        <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+          <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">1</span>
+            <span class="flex-1 font-display text-xl font-bold">PLAN</span>
+            <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+          </summary>
+          <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+            <div><dt class="font-bold text-ink">Claude may</dt><dd>change only the plan and the config.</dd></div>
+            <div><dt class="font-bold text-ink">You decide</dt><dd>when the plan is right.</dd></div>
+          </dl>
+        </details>
+      </div>
+
+      <p class="fade-up mt-12 text-xs font-bold uppercase tracking-[0.2em] text-slateink">&#8635; Every cycle</p>
+      <ol class="loop mt-3 grid items-start gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">2</span>
+              <span class="flex-1 font-display text-xl font-bold">SPECIFY</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>read and ask questions. It changes nothing.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>the behaviour, in one or two sentences.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">3</span>
+              <span class="flex-1 font-display text-xl font-bold">RED</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>write tests only, in the cycle's files.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>when to move on. Your tests must <strong>fail</strong> (pass in a coverage cycle).</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">4</span>
+              <span class="flex-1 font-display text-xl font-bold">PROMPT</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>suggest a file to follow. It changes nothing.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>the pattern, or &ldquo;no pattern&rdquo;.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">5</span>
+              <span class="flex-1 font-display text-xl font-bold">GREEN</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>write code only. Tests are locked.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>when to move on. Your tests must <strong>pass</strong>.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">6</span>
+              <span class="flex-1 font-display text-xl font-bold">REVIEW</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>read and comment. It changes nothing.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>what to fix.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">7</span>
+              <span class="flex-1 font-display text-xl font-bold">REFACTOR</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>clean up the code. Tests stay locked.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>when to move on. Tests must still pass.</dd></div>
+            </dl>
+          </details>
+        </li>
+        <li class="fade-up relative">
+          <details class="group rounded-lg border-t-4 border-rooster bg-white p-6 shadow-sm">
+            <summary class="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-rooster font-display font-extrabold text-white">8</span>
+              <span class="flex-1 font-display text-xl font-bold">COMMIT</span>
+              <svg class="h-5 w-5 transition group-open:rotate-180" aria-hidden="true"><use href="#icon-chevron"/></svg>
+            </summary>
+            <dl class="mt-4 space-y-2 text-sm leading-relaxed text-slateink">
+              <div><dt class="font-bold text-ink">Claude may</dt><dd>suggest the message. Git is read-only for Claude.</dd></div>
+              <div><dt class="font-bold text-ink">You decide</dt><dd>the commit. You make it.</dd></div>
+            </dl>
+          </details>
+        </li>
+      </ol>
+
+      <h3 class="fade-up mt-16 font-display text-2xl font-bold">Cycle types</h3>
+      <p class="fade-up mt-2 max-w-2xl text-sm leading-relaxed text-slateink">Each cycle in the plan has a type. The type sets the route.</p>
+      <div class="mt-6 grid gap-6 md:grid-cols-3">
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h4 class="font-display text-lg font-bold">behaviour</h4>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">The full loop. RED expects new tests that <strong>fail</strong>.</p>
+        </div>
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h4 class="font-display text-lg font-bold">coverage</h4>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">The full loop. RED expects tests for what already works, that <strong>pass</strong>.</p>
+        </div>
+        <div class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h4 class="font-display text-lg font-bold">refactor &middot; documentation &middot; setup &middot; spike</h4>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">No RED. Tests stay locked the whole cycle.</p>
+        </div>
+      </div>
+      <p class="fade-up mt-8 text-sm text-slateink">Only you can skip, and only REVIEW and REFACTOR.</p>
+      <div class="fade-up mt-6">
+        <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/docs/phases.md" target="_blank" rel="noopener" class="inline-block rounded border-2 border-ink/20 px-6 py-3 font-display font-bold transition hover:border-rooster hover:text-rooster">All the rules: docs/phases.md</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. THE CRAFT INSIDE ============ -->
+  <section id="craft" class="scroll-mt-20 py-24">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">The craft inside</h2>
+      <p class="fade-up mt-4 max-w-2xl leading-relaxed text-slateink">At every phase, Claude gets the craft experienced engineers use. Not as a tip in a prompt, but as rules it reads before it writes.</p>
+
+      <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-6">
+          <h3 class="font-display text-xl font-bold">TDD &middot; BDD &middot; XP</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Test first, behaviour in plain words, small steps and fast feedback.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-6">
+          <h3 class="font-display text-xl font-bold">Clean Code</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Names that say what they do, short functions, code the next person can change.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-6">
+          <h3 class="font-display text-xl font-bold">Clean Architecture</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Business rules free of details. Dependencies point inward.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-6">
+          <h3 class="font-display text-xl font-bold">SOLID</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Five checks on coupling and cohesion, run on every change.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-6">
+          <h3 class="font-display text-xl font-bold">KISS &middot; DRY &middot; YAGNI</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">The simplest thing that works, one source for each rule, nothing &ldquo;for later&rdquo;.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-6">
+          <h3 class="font-display text-xl font-bold">Design patterns</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Used when the problem asks for one, with the signs it's overkill.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-6">
+          <h3 class="font-display text-xl font-bold">Tests</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Tests that make change safe and can't go stale.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-mist p-6">
+          <h3 class="font-display text-xl font-bold">Safety</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Safe by default: inputs checked, nothing outside the project touched, no secrets.</p>
+        </li>
+      </ul>
+
+      <p class="fade-up mt-12 text-xs font-bold uppercase tracking-[0.2em] text-slateink">Read when the work needs it</p>
+      <ul class="fade-up mt-3 flex flex-wrap gap-3 text-sm">
+        <li class="rounded-full bg-mist px-4 py-2 font-bold">Efficiency<span class="sr-only">: </span> <span class="font-normal text-slateink">collections, loops in loops</span></li>
+        <li class="rounded-full bg-mist px-4 py-2 font-bold">System design<span class="sr-only">: </span> <span class="font-normal text-slateink">many services, scale, load</span></li>
+        <li class="rounded-full bg-mist px-4 py-2 font-bold">Production<span class="sr-only">: </span> <span class="font-normal text-slateink">builds, pipelines, containers</span></li>
+        <li class="rounded-full bg-mist px-4 py-2 font-bold">Data and networks<span class="sr-only">: </span> <span class="font-normal text-slateink">tables, queries, ports</span></li>
+        <li class="rounded-full bg-mist px-4 py-2 font-bold">Runtime<span class="sr-only">: </span> <span class="font-normal text-slateink">JVM, memory, threads</span></li>
+      </ul>
+
+      <div class="fade-up mt-12 rounded-lg bg-ink p-7 text-white">
+        <h3 class="font-display text-2xl font-bold">Your corrections become rules.</h3>
+        <p class="mt-3 max-w-3xl leading-relaxed text-white/85">Correct Claude once, and it offers to write the rule down, with the date: in your project's <code class="text-white">CLAUDE.md</code>, or in your own copy of the skill if you install from a clone. Rules that help everyone? <a href="https://github.com/leandrodalbo/claudio-plugin/issues/new/choose" target="_blank" rel="noopener" class="underline decoration-rooster underline-offset-4 transition hover:text-rooster">Send them as an issue</a>.</p>
+      </div>
+
+      <div class="fade-up mt-8">
+        <a href="https://github.com/leandrodalbo/claudio-plugin/tree/main/plugin/skills/claudio" target="_blank" rel="noopener" class="inline-block rounded border-2 border-ink/20 px-6 py-3 font-display font-bold transition hover:border-rooster hover:text-rooster">Read the craft</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8. WHERE THE VALUE IS ============ -->
+  <section id="value" class="scroll-mt-20 bg-mist py-24">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">Where the value is</h2>
+      <p class="fade-up mt-4 max-w-2xl leading-relaxed text-slateink">You keep the speed, and your judgement decides what ships. This is how ClaudioXP makes that hold.</p>
+
+      <ul class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <li class="fade-up min-w-0 rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h3 class="font-display text-xl font-bold">Enforced, not suggested.</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Hooks block the wrong move before it happens: files outside the plan, tests outside RED, tests changed in GREEN or REFACTOR.</p>
+          <p class="mt-4 text-xs font-bold uppercase tracking-wider text-slateink">What Claude sees</p>
+          <pre class="mt-2 overflow-x-auto rounded bg-inkdeep p-3 text-xs text-white"><code>Tests are locked in GREEN, and tests/test_order.py is a test file. Go back to RED to change a test.</code></pre>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h3 class="font-display text-xl font-bold">Tests decide.</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">RED, GREEN and REFACTOR end only when your test command gives the right result. Claude saying &ldquo;done&rdquo; is not enough.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h3 class="font-display text-xl font-bold">You are the gate.</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">Claude can't move the phase or write to git. The hooks stop it, so the plan, the spec, the review and the commit stay yours.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h3 class="font-display text-xl font-bold">Small steps.</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink">One plan, one cycle, one change you can really read.</p>
+        </li>
+        <li class="fade-up rounded-lg border-t-4 border-rooster bg-white p-6">
+          <h3 class="font-display text-xl font-bold">Decades of craft built in.</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slateink"><a href="#craft" class="underline decoration-rooster underline-offset-4 transition hover:text-rooster">The craft</a> is there at every step, and your corrections become rules.</p>
+        </li>
+      </ul>
+
+      <p class="fade-up mt-10 text-sm text-slateink">Guard rails, not a sandbox. Tests prove behaviour, not design, so REVIEW is still a person reading the change.</p>
+    </div>
+  </section>
+
+  <!-- ============ 9. SEE IT WORK ============ -->
+  <section id="demos" class="scroll-mt-20 bg-ink py-24 text-white">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">See it work</h2>
+      <p class="fade-up mt-4 max-w-2xl leading-relaxed text-white/80">Real sessions in a real project. Pick your language, then press play.</p>
+
+      <div role="group" aria-label="Demo language" data-toggle class="fade-up mt-8 flex gap-2 text-sm font-bold">
+        <button type="button" data-pick="java" aria-pressed="true" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">Java · IntelliJ</button>
+        <button type="button" data-pick="typescript" aria-pressed="false" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">TypeScript · VS Code</button>
+      </div>
+
+      <!-- JAVA -->
+      <ul data-panel="java" class="mt-6 grid gap-6 md:grid-cols-2">
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="548" poster="assets/demo-java-tests-pass-so-no.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: the tests already pass, so RED refuses to move on">
+            <source src="assets/demo-java-tests-pass-so-no.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Tests pass, so no.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">The tests already pass, so RED refuses to move on.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="548" poster="assets/demo-java-notices-a-change.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: in GREEN a passing test suddenly fails, and Claude finds the line that changed">
+            <source src="assets/demo-java-notices-a-change.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Claude notices a change.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">In GREEN, a passing test suddenly fails. Claude finds the line that changed, fixes the code, not the test, and tells you.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="548" poster="assets/demo-java-decide-the-spec.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: you decide the spec">
+            <source src="assets/demo-java-decide-the-spec.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">You decide the spec.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">Claude proposes the behaviour; nothing changes until you agree.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="548" poster="assets/demo-java-review-wins.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: your review wins">
+            <source src="assets/demo-java-review-wins.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Your review wins.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">You read the change and decide what gets fixed.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4 md:col-span-2">
+          <video class="w-full rounded" width="960" height="412" poster="assets/demo-java-whole-cycle.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: a whole cycle, sped up">
+            <source src="assets/demo-java-whole-cycle.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">A whole cycle, sped up.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">From the spec to the commit, start to finish.</p>
+        </li>
+      </ul>
+
+      <!-- TYPESCRIPT -->
+      <ul data-panel="typescript" class="mt-6 grid hidden gap-6 md:grid-cols-2">
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="550" poster="assets/demo-typescript-stays-yours.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: a git command outside the read-only list is blocked, and Claude carries on with the allowed ones">
+            <source src="assets/demo-typescript-stays-yours.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Git stays yours.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">A git command outside the read-only list is blocked. Claude carries on with the allowed ones.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="550" poster="assets/demo-typescript-notices-a-change.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: in GREEN a passing test suddenly fails, and Claude finds the line that changed">
+            <source src="assets/demo-typescript-notices-a-change.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Claude notices a change.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">In GREEN, a passing test suddenly fails. Claude finds the line that changed, fixes the code, not the test, and tells you.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="550" poster="assets/demo-typescript-decide-the-spec.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: you decide the spec">
+            <source src="assets/demo-typescript-decide-the-spec.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">You decide the spec.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">Claude proposes the behaviour; nothing changes until you agree.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="550" poster="assets/demo-typescript-review-wins.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: your review wins">
+            <source src="assets/demo-typescript-review-wins.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Your review wins.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">You read the change and decide what gets fixed.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4 md:col-span-2">
+          <video class="w-full rounded" width="960" height="480" poster="assets/demo-typescript-whole-cycle.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: a whole cycle, sped up">
+            <source src="assets/demo-typescript-whole-cycle.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">A whole cycle, sped up.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">From the spec to the commit, start to finish.</p>
+        </li>
+      </ul>
+
+      <div class="fade-up mt-10 flex flex-wrap gap-3">
+        <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/demos/java/TRY-IT-YOURSELF-JAVA.md" target="_blank" rel="noopener" class="rounded border-2 border-white/30 px-6 py-3 font-display font-bold transition hover:border-rooster hover:text-rooster">Try it yourself: Java</a>
+        <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/demos/typescript/TRY-IT-YOURSELF-TYPESCRIPT.md" target="_blank" rel="noopener" class="rounded border-2 border-white/30 px-6 py-3 font-display font-bold transition hover:border-rooster hover:text-rooster">Try it yourself: TypeScript</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 10. FOOTER ============ -->
+  <footer class="bg-inkdeep py-12 text-center text-sm text-white/60">
+    <div class="mx-auto flex max-w-6xl flex-col items-center px-5">
+      <a href="#top" class="flex items-center gap-3">
+        <img src="assets/logo.png" alt="" width="30" height="44" class="h-11 w-auto">
+        <span class="font-display text-xl font-bold text-white">Claudio<span class="text-rooster">XP</span></span>
+      </a>
+      <p class="mt-4">Two commands and you're in. <a href="#install" class="font-semibold text-white underline decoration-rooster underline-offset-4 transition hover:text-rooster">Install</a></p>
+      <div class="mt-6 flex items-center gap-5 text-white">
+        <a href="https://github.com/leandrodalbo/claudio-plugin" target="_blank" rel="noopener" aria-label="GitHub" class="transition hover:text-rooster"><svg class="h-6 w-6" aria-hidden="true"><use href="#icon-github"/></svg></a>
+        <a href="https://discord.gg/AjyKgTbNtr" target="_blank" rel="noopener" aria-label="Discord" class="transition hover:text-rooster"><svg class="h-6 w-6" aria-hidden="true"><use href="#icon-discord"/></svg></a>
+        <a href="https://x.com/claudioxpplugin" target="_blank" rel="noopener" aria-label="X" class="transition hover:text-rooster"><svg class="h-6 w-6" aria-hidden="true"><use href="#icon-x"/></svg></a>
+      </div>
+      <p class="mt-6"><a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/docs/README.md" target="_blank" rel="noopener" class="underline decoration-rooster underline-offset-4 transition hover:text-white">Docs</a> &middot; <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" class="underline decoration-rooster underline-offset-4 transition hover:text-white">Contributing</a></p>
+      <p class="mt-6 text-xs">Free and open source, <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/LICENSE" target="_blank" rel="noopener" class="underline decoration-rooster underline-offset-4 transition hover:text-white">Apache 2.0</a> &middot; This site uses no cookies or tracking.</p>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    toggle.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('hidden') === false;
+      mobileNav.classList.toggle('flex', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileNav.classList.add('hidden'); mobileNav.classList.remove('flex');
+      toggle.setAttribute('aria-expanded', 'false');
+    }));
+
+    const copyLabels = { ready: 'Copy', done: 'Copied', blocked: 'Select it and copy' };
+    const copyLabelMs = 2000;
+    document.querySelectorAll('[data-copy]').forEach(button => {
+      let resetTimer;
+      button.addEventListener('click', async () => {
+        const command = button.parentElement.querySelector('code').textContent;
+        try {
+          await navigator.clipboard.writeText(command);
+          button.textContent = copyLabels.done;
+        } catch {
+          button.textContent = copyLabels.blocked;
+        }
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => { button.textContent = copyLabels.ready; }, copyLabelMs);
+      });
+    });
+
+    // Language toggles: each [data-toggle] group switches the [data-panel]s of its own section.
+    // Videos in a hidden panel pause; in the shown panel only [data-autoplay] videos start.
+    document.querySelectorAll('[data-toggle]').forEach(group => {
+      const section = group.closest('section');
+      const buttons = group.querySelectorAll('[data-pick]');
+      buttons.forEach(picked => picked.addEventListener('click', () => {
+        buttons.forEach(button => button.setAttribute('aria-pressed', String(button === picked)));
+        section.querySelectorAll('[data-panel]').forEach(panel => {
+          const isShown = panel.dataset.panel === picked.dataset.pick;
+          panel.classList.toggle('hidden', !isShown);
+          const videos = panel.matches('video') ? [panel] : panel.querySelectorAll('video');
+          videos.forEach(video => {
+            if (!isShown) { video.pause(); return; }
+            // If the browser refuses to play, do nothing: the video's own controls let the visitor start it.
+            if (video.hasAttribute('data-autoplay')) { video.play().catch(() => {}); }
+          });
+        });
+      }));
+    });
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
