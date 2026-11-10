@@ -168,5 +168,5 @@ VENV_SETUP_FAILED = (
 MAKING_THE_VENV = "making the venv"
 INSTALLING_THE_LIBRARIES = "installing the libraries"
 FINDING_THE_DATA_FOLDER = "finding the plugin's data folder"
-DATA_FOLDER_NOT_SET = "CLAUDE_PLUGIN_DATA is not set"
+DATA_FOLDER_NOT_SET = "{variable} is not set"
 STEP_EXIT_CODE = "exit code {code}"

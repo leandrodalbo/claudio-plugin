@@ -12,12 +12,12 @@ from pathlib import Path
 from tdcg.core import messages
 from tdcg.core.constants import (
     BLOCK_EXIT_CODE,
+    DONE_MARK_FILE,
     DONE_MARK_PYTHON_LINE,
     ENCODING,
     MAKE_VENV,
     PIP_INSTALL,
     PLUGIN_DATA_VARIABLE,
-    REQUIREMENTS_FILE,
     VENV_DIR,
     VENV_PYTHON,
 )
@@ -37,12 +37,13 @@ def ensure_venv(data: Path, build: Callable[[Path, Path], None] = build_venv) ->
     """Returns quietly when the venv is ready. Otherwise builds it again from nothing; the done
     mark is deleted first and written last, so a build that stops half way is never taken for
     ready. Raises VenvSetupError when the build fails."""
-    mark = data / REQUIREMENTS_FILE
+    mark = data / DONE_MARK_FILE
     venv = data / VENV_DIR
     if _is_ready(venv, mark):
         return
     mark.unlink(missing_ok=True)
-    shutil.rmtree(venv, ignore_errors=True)
+    if venv.exists():
+        shutil.rmtree(venv)
     data.mkdir(parents=True, exist_ok=True)
     build(venv, REQUIREMENTS_PATH)
     mark.write_text(_build_done_mark(), encoding=ENCODING)
@@ -59,8 +60,9 @@ def _is_ready(venv: Path, mark: Path) -> bool:
 def _build_done_mark() -> str:
     """The Python running this is the one that makes the venv. Only major.minor: a patch upgrade
     keeps the venv's libraries working; a minor one doesn't (they sit in lib/python3.X/)."""
-    version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    python_line = DONE_MARK_PYTHON_LINE.format(version=version)
+    python_line = DONE_MARK_PYTHON_LINE.format(
+        major=sys.version_info.major, minor=sys.version_info.minor
+    )
     return python_line + REQUIREMENTS_PATH.read_text(encoding=ENCODING)
 
 
@@ -82,7 +84,8 @@ def _find_last_error_line(finished: subprocess.CompletedProcess) -> str:
 def _find_data_folder() -> Path:
     data = os.environ.get(PLUGIN_DATA_VARIABLE)
     if not data:
-        raise VenvSetupError(messages.FINDING_THE_DATA_FOLDER, messages.DATA_FOLDER_NOT_SET)
+        error = messages.DATA_FOLDER_NOT_SET.format(variable=PLUGIN_DATA_VARIABLE)
+        raise VenvSetupError(messages.FINDING_THE_DATA_FOLDER, error)
     return Path(data)
 
 

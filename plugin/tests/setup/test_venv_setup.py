@@ -4,6 +4,7 @@ from tdcg.core.errors import VenvSetupError
 from tdcg.setup.venv_setup import build_venv, ensure_venv
 from tests.support.constants import (
     DATA_FOLDER_NOT_SET,
+    ENCODING,
     FILE_IN_THE_WAY,
     FINDING_THE_DATA_FOLDER,
     INSTALLING_THE_LIBRARIES,
@@ -11,6 +12,7 @@ from tests.support.constants import (
     NEW_DATA_DIR,
     OLD_REQUIREMENTS,
     OLD_VENV_FILE,
+    OLD_VENV_TEXT,
     OTHER_PYTHON_VERSION,
     SAMPLE_HOOK_EVENT,
     SAMPLE_PIP_ERROR,
@@ -103,7 +105,7 @@ def test_a_broken_venv_python_builds_the_venv_again(tmp_path):
 
 def test_a_venv_built_again_starts_from_an_empty_folder(tmp_path):
     write_venv_python(tmp_path)
-    (tmp_path / OLD_VENV_FILE).write_text("old", encoding="utf-8")
+    (tmp_path / OLD_VENV_FILE).write_text(OLD_VENV_TEXT, encoding=ENCODING)
     write_done_mark(tmp_path, build_done_mark(THIS_PYTHON_VERSION, OLD_REQUIREMENTS))
     ensure_venv(tmp_path, build_fake_venv)
     assert not (tmp_path / OLD_VENV_FILE).exists()
@@ -131,7 +133,7 @@ def test_a_failed_build_leaves_no_done_mark(tmp_path):
 def test_a_venv_that_cant_be_made_names_the_step_and_pythons_error(tmp_path):
     """The real build, failing at once with no internet needed: the venv folder is under a file."""
     blocker = tmp_path / FILE_IN_THE_WAY
-    blocker.write_text("", encoding="utf-8")
+    blocker.write_text("", encoding=ENCODING)
     venv = blocker / VENV_DIR
     with pytest.raises(VenvSetupError) as raised:
         build_venv(venv, PLUGIN_REQUIREMENTS)
