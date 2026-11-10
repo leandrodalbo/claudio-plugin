@@ -24,6 +24,8 @@ from tdcg.state.plan_file import (
 )
 from tests.support.constants import (
     ALL_CYCLE_TYPES,
+    BAD_JSON_LINE,
+    BAD_JSON_MISSING_COMMA,
     DONE_DIR,
     DONE_PLAN_FILE,
     NO_CYCLE_LEFT_PROBLEM,
@@ -178,8 +180,8 @@ def test_broken_plan_says_to_regenerate_it_in_plan(tmp_path):
 
 
 def test_bad_json_says_the_line(tmp_path):
-    write_tdcg_text(tmp_path, PLAN_FILE, '{\n  "title": "Phase machine",\n}')
-    with pytest.raises(BrokenPlanError, match="line 2"):
+    write_tdcg_text(tmp_path, PLAN_FILE, BAD_JSON_MISSING_COMMA)
+    with pytest.raises(BrokenPlanError, match=BAD_JSON_LINE):
         read_plan(tmp_path)
 
 

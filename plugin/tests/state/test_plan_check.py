@@ -7,7 +7,7 @@ from jsonschema.validators import validator_for
 import tdcg
 from tdcg.core.errors import DuplicateCycleError, InvalidPlanError, NoPlanError, RepeatedFieldError
 from tdcg.state.plan_check import ensure_plan_valid
-from tests.support.constants import ALL_CYCLE_TYPES, PLAN_FILE
+from tests.support.constants import ALL_CYCLE_TYPES, BAD_JSON_LINE, BAD_JSON_MISSING_COMMA, PLAN_FILE
 from tests.support.sample_plans import (
     build_plan_with_cycle_field_set_to,
     build_plan_with_field_set_to,
@@ -151,8 +151,8 @@ def test_error_lists_every_problem(tmp_path):
 
 
 def test_bad_json_error_says_the_line(tmp_path):
-    write_tdcg_text(tmp_path, PLAN_FILE, '{\n  "title": "Phase machine",\n}')
-    with pytest.raises(InvalidPlanError, match="line 2"):
+    write_tdcg_text(tmp_path, PLAN_FILE, BAD_JSON_MISSING_COMMA)
+    with pytest.raises(InvalidPlanError, match=BAD_JSON_LINE):
         ensure_plan_valid(tmp_path)
 
 

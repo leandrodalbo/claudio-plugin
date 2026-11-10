@@ -312,3 +312,8 @@ FREE_FILE = "README.md"
 FREE_FILE_IN_A_FOLDER = "notes/deep/down/idea.md"
 PATTERN_NOT_IN_A_LIST = "notes/**"
 BAD_PATTERN_LISTS = [PATTERN_NOT_IN_A_LIST, ["notes/**", 7], None]
+
+# Broken JSON for "the error says the line": a missing comma, which every Python we support
+# (3.11+) reports at the same line. A trailing comma doesn't: 3.13+ says line 2, older says 3.
+BAD_JSON_MISSING_COMMA = '{\n  "title": "Phase machine"\n  "status": "active"\n}'
+BAD_JSON_LINE = "line 3"

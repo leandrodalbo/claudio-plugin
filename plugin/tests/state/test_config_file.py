@@ -5,7 +5,14 @@ import pytest
 from tdcg.core.errors import BrokenConfigError, NoConfigError, RepeatedFieldError
 from tdcg.domain.config import Config
 from tdcg.state.config_file import read_config, read_free_files
-from tests.support.constants import BAD_PATTERN_LISTS, CONFIG_FILE, FREE_FILES, FREE_FILES_FIELD
+from tests.support.constants import (
+    BAD_JSON_LINE,
+    BAD_JSON_MISSING_COMMA,
+    BAD_PATTERN_LISTS,
+    CONFIG_FILE,
+    FREE_FILES,
+    FREE_FILES_FIELD,
+)
 from tests.support.sample_configs import (
     build_config_with_field_set_to,
     build_config_with_free_files,
@@ -85,8 +92,8 @@ def test_broken_config_says_to_regenerate_it_in_plan(tmp_path):
 
 
 def test_bad_json_says_the_line(tmp_path):
-    write_tdcg_text(tmp_path, CONFIG_FILE, '{\n  "test_command": "pytest",\n}')
-    with pytest.raises(BrokenConfigError, match="line 2"):
+    write_tdcg_text(tmp_path, CONFIG_FILE, BAD_JSON_MISSING_COMMA)
+    with pytest.raises(BrokenConfigError, match=BAD_JSON_LINE):
         read_config(tmp_path)
 
 
