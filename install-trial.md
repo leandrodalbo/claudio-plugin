@@ -79,4 +79,3 @@ Move to a phase (`/claudio:next`) and let Claude start it.
 
 - [ ] Claude reads `phases/<phase>.md` from the installed plugin with no permission error.
   The README can't ask people for `--add-dir`.
-
