@@ -1,0 +1,80 @@
+name: Bug
+description: Something in ClaudioXP doesn't work as it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for telling us. A security problem? Please don't post it here; see the security policy.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Copy any message from ClaudioXP or Claude Code.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we make it happen?
+      description: Step by step, from a new project if you can.
+      placeholder: |
+        1. /claudio:init
+        2. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: What /claudio:status said.
+      options:
+        - PLAN
+        - SPECIFY
+        - RED
+        - PROMPT
+        - GREEN
+        - REVIEW
+        - REFACTOR
+        - COMMIT
+        - Not set up yet
+    validations:
+      required: true
+  - type: input
+    id: claude-version
+    attributes:
+      label: Claude Code version
+      description: The output of `claude --version`.
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: Ubuntu 24.04, macOS 15, Windows 11 with WSL, ...
+    validations:
+      required: true
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      description: The output of `python3 --version`.
+    validations:
+      required: true
+  - type: dropdown
+    id: editor
+    attributes:
+      label: Where do you run Claude Code?
+      options:
+        - Terminal
+        - VS Code
+        - IntelliJ
+        - Neovim
+        - Other
+    validations:
+      required: true

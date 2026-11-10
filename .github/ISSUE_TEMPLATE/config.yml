@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions
+    url: https://discord.gg/AjyKgTbNtr
+    about: Ask on Discord. Issues are for bugs and ideas.
+  - name: Security problem
+    url: https://github.com/leandrodalbo/claudio-plugin/security/policy
+    about: Please report it in private, never in a public issue.
