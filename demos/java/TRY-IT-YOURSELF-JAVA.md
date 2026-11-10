@@ -1,6 +1,6 @@
-# Try Claudio yourself: Java in IntelliJ
+# Try ClaudioXP yourself: Java in IntelliJ
 
-Build a small ID generator with Claude while Claudio keeps the work honest. One small cycle, from
+Build a small ID generator with Claude while ClaudioXP keeps the work honest. One small cycle, from
 plan to commit.
 
 You will also ask Claude to break the rules on purpose, so you can see what stops it.
@@ -8,17 +8,17 @@ You will also ask Claude to break the rules on purpose, so you can see what stop
 ## What you need
 
 - [Claude Code](https://code.claude.com/docs)
-- Python 3 with `jsonschema` (`pip install jsonschema`)
+- Python 3.11 or newer
 - git
 - Java 21 or newer, and Maven
 - IntelliJ IDEA
-- Claudio, downloaded to a folder on your computer
+- ClaudioXP, installed: see [Install](../../docs/install.md)
 
-Below, `/path/to/claudio` is that folder. Keep a second terminal open for your git commit.
+Keep a second terminal open for your git commit.
 
 ## 1. Set up an empty project
 
-Start Claude Code in a new folder, without Claudio for now:
+Start Claude Code in a new folder, without ClaudioXP for now:
 
 ```
 mkdir id-generator && cd id-generator
@@ -38,13 +38,13 @@ git add -A
 git commit -m "Empty project"
 ```
 
-## 2. Turn Claudio on
+## 2. Turn ClaudioXP on
 
 Open the folder in IntelliJ (**File → Open**), then open its terminal (**View → Tool Windows →
 Terminal**) and start Claude there:
 
 ```
-claude --plugin-dir /path/to/claudio/plugin --add-dir /path/to/claudio/plugin/skills
+claude
 ```
 
 Then:
