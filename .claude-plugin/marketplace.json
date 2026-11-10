@@ -1,0 +1,15 @@
+{
+  "name": "claudio-plugin",
+  "owner": {
+    "name": "Leandro Dal Bo",
+    "url": "https://github.com/leandrodalbo"
+  },
+  "description": "Claudio's own marketplace: guard rails for AI-assisted development.",
+  "plugins": [
+    {
+      "name": "claudio",
+      "source": "./plugin",
+      "description": "Guard rails for AI-assisted development: TDCG cycles, enforced."
+    }
+  ]
+}

@@ -23,6 +23,8 @@ Python specifics:
   - `tdcg/checks/` = runs the user's test command (3.5).
   - `tdcg/context/` = what Claude is told before each message (3.6).
   - `tdcg/commands/` = what each `/claudio:` command does (3.7).
+  - `tdcg/setup/` = the plugin's own venv for its libraries, built from `requirements.txt` in
+    `${CLAUDE_PLUGIN_DATA}` (5.1). Plain Python only; depends on `core` only.
   - `tdcg/core/plugin_folder.py` = where the plugin and the skill are, found from the package.
 - Dependencies point inward: `hooks` → `commands` → `guards`/`checks` → `state` → `domain`/`core`.
 - Private helpers start with `_`.

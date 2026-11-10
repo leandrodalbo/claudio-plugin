@@ -1,4 +1,13 @@
 {
   "name": "claudio",
-  "description": "Guard rails for AI-assisted development: TDCG cycles, enforced."
+  "version": "0.1.0",
+  "description": "Guard rails for AI-assisted development: TDCG cycles, enforced.",
+  "author": {
+    "name": "Leandro Dal Bo",
+    "url": "https://github.com/leandrodalbo"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/leandrodalbo/claudio-plugin",
+  "repository": "https://github.com/leandrodalbo/claudio-plugin",
+  "keywords": ["tdd", "tdcg", "xp", "guard-rails", "hooks"]
 }

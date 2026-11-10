@@ -7,21 +7,47 @@ import pytest
 from tests.support.constants import (
     COMMAND_FILES,
     EXPECTED_HOOKS_FILE,
+    EXPECTED_MANIFEST,
+    EXPECTED_MARKETPLACE,
+    EXPECTED_REQUIREMENTS,
     HOOK_MODULES,
     MOVE_COMMAND_FILES,
 )
+from tests.support.hook_processes import PLUGIN_DIR
 from tests.support.plugin_files import (
     COMMANDS_DIR,
+    REPO_DIR,
     find_command_files,
     load_hooks_file,
     load_manifest,
+    load_marketplace,
+    load_plugin_requirements,
 )
 from tests.support.skill_files import load_frontmatter
 
 
 # plugin.json
-def test_the_plugin_is_named_claudio():
-    assert load_manifest()["name"] == "claudio"
+def test_the_manifest_has_every_field_people_and_validate_strict_need():
+    assert load_manifest() == EXPECTED_MANIFEST
+
+
+# .claude-plugin/marketplace.json at the repo root
+def test_the_marketplace_lists_the_plugin_once():
+    assert load_marketplace() == EXPECTED_MARKETPLACE
+
+
+def test_the_marketplace_entry_has_the_plugins_own_name():
+    assert [plugin["name"] for plugin in load_marketplace()["plugins"]] == [load_manifest()["name"]]
+
+
+def test_the_marketplace_entry_points_to_the_plugin_folder():
+    source = load_marketplace()["plugins"][0]["source"]
+    assert (REPO_DIR / source).resolve() == PLUGIN_DIR.resolve()
+
+
+# requirements.txt
+def test_every_library_is_pinned():
+    assert load_plugin_requirements().splitlines() == EXPECTED_REQUIREMENTS
 
 
 # hooks.json
