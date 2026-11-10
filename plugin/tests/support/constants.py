@@ -185,6 +185,12 @@ MOVES_THAT_NEED_PASSING_TESTS = [("GREEN", "REVIEW"), ("REFACTOR", "COMMIT")]
 # How Claude Code starts the plugin: hooks/hooks.json, written out in full
 _RUN_MODULE = 'cd "${CLAUDE_PLUGIN_ROOT}" && python3 -m '
 _RUN_WHERE_WE_ARE = {"type": "command", "command": _RUN_MODULE + "tdcg.hooks.where_we_are_hook"}
+_RUN_VENV_SETUP = {"type": "command", "command": _RUN_MODULE + "tdcg.setup.venv_setup"}
+# The command hook needs jsonschema: set up the venv first, then run the hook with its Python
+_RUN_COMMAND_HOOK = (
+    _RUN_VENV_SETUP["command"]
+    + ' && "${CLAUDE_PLUGIN_DATA}/venv/bin/python3" -m tdcg.hooks.tdcg_command_hook'
+)
 _RUN_SHELL_AFTER = {"type": "command", "command": _RUN_MODULE + "tdcg.hooks.shell_after_hook"}
 EXPECTED_HOOKS_FILE = {
     "hooks": {
@@ -209,13 +215,13 @@ EXPECTED_HOOKS_FILE = {
                 "hooks": [
                     {
                         "type": "command",
-                        "command": _RUN_MODULE + "tdcg.hooks.tdcg_command_hook",
+                        "command": _RUN_COMMAND_HOOK,
                         "onFailure": "block",
                     }
                 ],
             }
         ],
-        "SessionStart": [{"hooks": [_RUN_WHERE_WE_ARE]}],
+        "SessionStart": [{"hooks": [_RUN_WHERE_WE_ARE, _RUN_VENV_SETUP]}],
     }
 }
 HOOK_MODULES = [
@@ -224,7 +230,79 @@ HOOK_MODULES = [
     "tdcg.hooks.shell_after_hook",
     "tdcg.hooks.where_we_are_hook",
     "tdcg.hooks.tdcg_command_hook",
+    "tdcg.setup.venv_setup",
 ]
+
+# How people install the plugin: plugin.json and the repo's marketplace, written out in full
+_REPO_URL = "https://github.com/leandrodalbo/claudio-plugin"
+_AUTHOR = {"name": "Leandro Dal Bo", "url": "https://github.com/leandrodalbo"}
+_DESCRIPTION = "Guard rails for AI-assisted development: TDCG cycles, enforced."
+EXPECTED_MANIFEST = {
+    "name": "claudio",
+    "version": "0.1.0",
+    "description": _DESCRIPTION,
+    "author": _AUTHOR,
+    "license": "Apache-2.0",
+    "homepage": _REPO_URL,
+    "repository": _REPO_URL,
+    "keywords": [
+        "tdd",
+        "tdcg",
+        "xp",
+        "clean-code",
+        "clean-architecture",
+        "solid",
+        "ai-assisted-development",
+        "claude-code",
+        "guard-rails",
+        "hooks",
+    ],
+}
+EXPECTED_MARKETPLACE = {
+    "name": "claudio-plugin",
+    "owner": _AUTHOR,
+    # validate --strict refuses a marketplace with no description
+    "description": "Claudio's own marketplace: guard rails for AI-assisted development.",
+    "plugins": [{"name": "claudio", "source": "./plugin", "description": _DESCRIPTION}],
+}
+# Every library, pinned: a fresh venv with jsonschema 4.26.0 (pip freeze, 2026-11-10)
+EXPECTED_REQUIREMENTS = [
+    "attrs==26.1.0",
+    "jsonschema==4.26.0",
+    "jsonschema-specifications==2025.9.1",
+    "referencing==0.37.0",
+    "rpds-py==2026.9.1",
+]
+
+# The plugin's own venv (5.1)
+PLUGIN_DATA_VARIABLE = "CLAUDE_PLUGIN_DATA"
+SETUP_MODULE = "tdcg.setup.venv_setup"
+VENV_DIR = "venv"
+VENV_PYTHON = "venv/bin/python3"
+VENV_BIN_PYTHON = "bin/python3"
+GONE_PYTHON = "python3.gone"
+NEW_DATA_DIR = "data"
+FILE_IN_THE_WAY = "a-file"
+DONE_MARK = "venv-done.txt"
+# The done mark: the Python version that built the venv (major.minor), then the requirements
+DONE_MARK_PYTHON_LINE = "python {version}\n"
+OTHER_PYTHON_VERSION = "3.0"
+OLD_REQUIREMENTS = "jsonschema==4.0.0\n"
+OLD_VENV_FILE = "venv/left-from-before.txt"
+OLD_VENV_TEXT = "old"
+VENV_SETUP_FAILED = (
+    "Claudio couldn't install its Python libraries ({step}: {error}). Guard rails still work; "
+    "/claudio: commands don't. Fix: check your internet; on Debian/Ubuntu: "
+    "sudo apt install python3-venv. Then try any /claudio: command again."
+)
+MAKING_THE_VENV = "making the venv"
+INSTALLING_THE_LIBRARIES = "installing the libraries"
+FINDING_THE_DATA_FOLDER = "finding the plugin's data folder"
+DATA_FOLDER_NOT_SET = "CLAUDE_PLUGIN_DATA is not set"
+SAMPLE_PIP_ERROR = "ERROR: No matching distribution found for jsonschema==4.26.0"
+# python3 -m venv's own words when the folder is under a file
+VENV_UNDER_A_FILE_ERROR = "Error: [Errno 20] Not a directory: '{path}'"
+SAMPLE_HOOK_EVENT = '{"hook_event_name": "UserPromptExpansion"}'
 COMMAND_FILES = ["back.md", "init.md", "next.md", "status.md"]
 
 # The free list (3.8)

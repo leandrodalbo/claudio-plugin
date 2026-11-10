@@ -41,14 +41,15 @@
       {
         "matcher": "^claudio:(init|next|back|status)$",
         "hooks": [
-          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.tdcg_command_hook", "onFailure": "block" }
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.setup.venv_setup && \"${CLAUDE_PLUGIN_DATA}/venv/bin/python3\" -m tdcg.hooks.tdcg_command_hook", "onFailure": "block" }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.where_we_are_hook" }
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.hooks.where_we_are_hook" },
+          { "type": "command", "command": "cd \"${CLAUDE_PLUGIN_ROOT}\" && python3 -m tdcg.setup.venv_setup" }
         ]
       }
     ]

@@ -7,6 +7,7 @@ from tdcg.core.constants import (
     CLAUDIO_SKILL,
     MARKDOWN_EXTENSION,
     PHASES_DIR,
+    REQUIREMENTS_FILE,
     SCHEMA_DIR,
     SKILLS_DIR,
 )
@@ -16,6 +17,7 @@ _PACKAGE_FOLDER = Path(__file__).resolve().parents[1]
 _PLUGIN_FOLDER = _PACKAGE_FOLDER.parent
 SKILL_FOLDER = _PLUGIN_FOLDER / SKILLS_DIR / CLAUDIO_SKILL
 SCHEMA_FOLDER = _PACKAGE_FOLDER / SCHEMA_DIR
+REQUIREMENTS_PATH = _PLUGIN_FOLDER / REQUIREMENTS_FILE
 
 
 def build_phase_rules_path(phase_name: str) -> Path:

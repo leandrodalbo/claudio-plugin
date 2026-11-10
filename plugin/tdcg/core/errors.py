@@ -209,3 +209,10 @@ class TestsShouldHavePassedError(TdcgError):
 class CoverageTestsShouldHavePassedError(TdcgError):
     def __init__(self):
         super().__init__(messages.COVERAGE_TESTS_SHOULD_HAVE_PASSED)
+
+
+class VenvSetupError(TdcgError):
+    """`step` says what was being done, `error` the last words of what failed."""
+
+    def __init__(self, step: str, error: str):
+        super().__init__(messages.VENV_SETUP_FAILED.format(step=step, error=error))

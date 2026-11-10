@@ -158,3 +158,15 @@ COVERAGE_TESTS_SHOULD_HAVE_PASSED = (
     "they must pass."
 )
 TESTS_SHOULD_HAVE_PASSED = "{phase}: the tests fail. Make them pass, then /claudio:next."
+
+# the plugin's own venv
+VENV_SETUP_FAILED = (
+    "Claudio couldn't install its Python libraries ({step}: {error}). Guard rails still work; "
+    "/claudio: commands don't. Fix: check your internet; on Debian/Ubuntu: "
+    "sudo apt install python3-venv. Then try any /claudio: command again."
+)
+MAKING_THE_VENV = "making the venv"
+INSTALLING_THE_LIBRARIES = "installing the libraries"
+FINDING_THE_DATA_FOLDER = "finding the plugin's data folder"
+DATA_FOLDER_NOT_SET = "{variable} is not set"
+STEP_EXIT_CODE = "exit code {code}"

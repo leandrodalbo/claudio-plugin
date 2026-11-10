@@ -84,6 +84,17 @@ CLAUDIO_SKILL = "claudio"
 PHASES_DIR = "phases"
 MARKDOWN_EXTENSION = ".md"
 LIST_SEPARATOR = ", "
+# The plugin's own venv (5.1): in the folder Claude Code keeps for the plugin, built from the
+# plugin's requirements.txt; the done mark next to the venv holds the Python version
+# (major.minor) that built it, then the requirements it was built from.
+PLUGIN_DATA_VARIABLE = "CLAUDE_PLUGIN_DATA"
+REQUIREMENTS_FILE = "requirements.txt"
+DONE_MARK_FILE = "venv-done.txt"
+DONE_MARK_PYTHON_LINE = "python {major}.{minor}\n"
+VENV_DIR = "venv"
+VENV_PYTHON = ("bin", "python3")
+MAKE_VENV = ("-m", "venv")
+PIP_INSTALL = ("-m", "pip", "install", "--quiet", "--disable-pip-version-check", "-r")
 # The plugin's commands (3.7): Claude Code names them "claudio:next", with the words in the args.
 PLUGIN_COMMAND_PREFIX = "claudio:"
 COMMAND_NAME_FIELD = "command_name"
