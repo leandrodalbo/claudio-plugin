@@ -8,7 +8,7 @@ Questions? Ask on [Discord](https://discord.gg/AjyKgTbNtr). Please follow the
 ## What you need
 
 - git
-- Python 3 (on Debian/Ubuntu also `python3-venv`)
+- Python 3.11 or newer (on Debian/Ubuntu also `python3-venv`)
 - [Claude Code](https://code.claude.com/docs)
 
 ## 1. Set up
@@ -35,8 +35,8 @@ internet and takes a few seconds.
 
 ## 3. Try your copy in Claude Code
 
-If you installed ClaudioXP from the marketplace, remove it first. With both on, every hook runs
-twice:
+If you installed ClaudioXP from the marketplace, remove it first. With both on, both run their
+hooks:
 
 ```
 claude plugin uninstall claudio@claudio-plugin
@@ -66,6 +66,7 @@ The XP practices we use:
 - **Test first:** a failing test, then the code.
 - **Refactoring:** every cycle, tests green.
 - **Small releases:** one cycle, one pull request.
+- **Continuous integration:** the tests run on every pull request.
 - **Collective ownership:** anyone can improve any part.
 - **Coding standard:** `plugin/skills/claudio/craft/`.
 
