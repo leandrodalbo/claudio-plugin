@@ -138,14 +138,14 @@
 
       <!-- DEMO -->
       <div class="min-w-0">
-        <div role="group" aria-label="Demo language" class="mb-3 flex gap-2 text-sm font-bold">
-          <button type="button" data-demo="java" aria-pressed="true" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">Java · IntelliJ</button>
-          <button type="button" data-demo="typescript" aria-pressed="false" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">TypeScript · VS Code</button>
+        <div role="group" aria-label="Demo language" data-toggle class="mb-3 flex gap-2 text-sm font-bold">
+          <button type="button" data-pick="java" aria-pressed="true" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">Java · IntelliJ</button>
+          <button type="button" data-pick="typescript" aria-pressed="false" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">TypeScript · VS Code</button>
         </div>
-        <video id="demo-java" class="w-full rounded-lg shadow-2xl" width="1280" height="548" poster="assets/demo-java-says-no.jpg" controls autoplay muted loop playsinline aria-label="Demo in Java: Claude tries to skip ahead, and ClaudioXP says no">
+        <video data-panel="java" data-autoplay class="w-full rounded-lg shadow-2xl" width="1280" height="548" poster="assets/demo-java-says-no.jpg" controls autoplay muted loop playsinline aria-label="Demo in Java: Claude tries to skip ahead, and ClaudioXP says no">
           <source src="assets/demo-java-says-no.mp4" type="video/mp4">
         </video>
-        <video id="demo-typescript" class="hidden w-full rounded-lg shadow-2xl" width="1280" height="550" poster="assets/demo-typescript-says-no.jpg" preload="none" controls muted loop playsinline aria-label="Demo in TypeScript: Claude tries to skip ahead, and ClaudioXP says no">
+        <video data-panel="typescript" data-autoplay class="hidden w-full rounded-lg shadow-2xl" width="1280" height="550" poster="assets/demo-typescript-says-no.jpg" preload="none" controls muted loop playsinline aria-label="Demo in TypeScript: Claude tries to skip ahead, and ClaudioXP says no">
           <source src="assets/demo-typescript-says-no.mp4" type="video/mp4">
         </video>
       </div>
@@ -516,7 +516,96 @@
   <!-- ============ 9. SEE IT WORK ============ -->
   <section id="demos" class="scroll-mt-20 bg-ink py-24 text-white">
     <div class="mx-auto max-w-6xl px-5">
-      <h2 class="font-display text-4xl font-extrabold md:text-5xl">See it work</h2>
+      <h2 class="fade-up font-display text-4xl font-extrabold md:text-5xl">See it work</h2>
+      <p class="fade-up mt-4 max-w-2xl leading-relaxed text-white/80">Real sessions in a real project. Pick your language, then press play.</p>
+
+      <div role="group" aria-label="Demo language" data-toggle class="fade-up mt-8 flex gap-2 text-sm font-bold">
+        <button type="button" data-pick="java" aria-pressed="true" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">Java · IntelliJ</button>
+        <button type="button" data-pick="typescript" aria-pressed="false" class="rounded px-4 py-2 transition aria-pressed:bg-rooster aria-[pressed=false]:bg-white/10">TypeScript · VS Code</button>
+      </div>
+
+      <!-- JAVA -->
+      <ul data-panel="java" class="mt-6 grid gap-6 md:grid-cols-2">
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="548" poster="assets/demo-java-tests-pass-so-no.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: the tests already pass, so RED refuses to move on">
+            <source src="assets/demo-java-tests-pass-so-no.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Tests pass, so no.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">The tests already pass, so RED refuses to move on.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="548" poster="assets/demo-java-notices-a-change.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: in GREEN a passing test suddenly fails, and Claude finds the line that changed">
+            <source src="assets/demo-java-notices-a-change.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Claude notices a change.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">In GREEN, a passing test suddenly fails. Claude finds the line that changed, fixes the code, not the test, and tells you.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="548" poster="assets/demo-java-decide-the-spec.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: you decide the spec">
+            <source src="assets/demo-java-decide-the-spec.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">You decide the spec.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">Claude proposes the behaviour; nothing changes until you agree.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="548" poster="assets/demo-java-review-wins.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: your review wins">
+            <source src="assets/demo-java-review-wins.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Your review wins.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">You read the change and decide what gets fixed.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4 md:col-span-2">
+          <video class="w-full rounded" width="960" height="412" poster="assets/demo-java-whole-cycle.jpg" preload="none" controls muted loop playsinline aria-label="Java demo: a whole cycle, sped up">
+            <source src="assets/demo-java-whole-cycle.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">A whole cycle, sped up.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">From the spec to the commit, start to finish.</p>
+        </li>
+      </ul>
+
+      <!-- TYPESCRIPT -->
+      <ul data-panel="typescript" class="mt-6 grid hidden gap-6 md:grid-cols-2">
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="550" poster="assets/demo-typescript-stays-yours.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: a git command outside the read-only list is blocked, and Claude carries on with the allowed ones">
+            <source src="assets/demo-typescript-stays-yours.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Git stays yours.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">A git command outside the read-only list is blocked. Claude carries on with the allowed ones.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="550" poster="assets/demo-typescript-notices-a-change.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: in GREEN a passing test suddenly fails, and Claude finds the line that changed">
+            <source src="assets/demo-typescript-notices-a-change.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Claude notices a change.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">In GREEN, a passing test suddenly fails. Claude finds the line that changed, fixes the code, not the test, and tells you.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="550" poster="assets/demo-typescript-decide-the-spec.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: you decide the spec">
+            <source src="assets/demo-typescript-decide-the-spec.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">You decide the spec.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">Claude proposes the behaviour; nothing changes until you agree.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4">
+          <video class="w-full rounded" width="1280" height="550" poster="assets/demo-typescript-review-wins.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: your review wins">
+            <source src="assets/demo-typescript-review-wins.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">Your review wins.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">You read the change and decide what gets fixed.</p>
+        </li>
+        <li class="rounded-lg bg-white/5 p-4 md:col-span-2">
+          <video class="w-full rounded" width="960" height="480" poster="assets/demo-typescript-whole-cycle.jpg" preload="none" controls muted loop playsinline aria-label="TypeScript demo: a whole cycle, sped up">
+            <source src="assets/demo-typescript-whole-cycle.mp4" type="video/mp4">
+          </video>
+          <h3 class="mt-4 font-display text-xl font-bold">A whole cycle, sped up.</h3>
+          <p class="mt-1 text-sm leading-relaxed text-white/80">From the spec to the commit, start to finish.</p>
+        </li>
+      </ul>
+
+      <div class="fade-up mt-10 flex flex-wrap gap-3">
+        <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/demos/java/TRY-IT-YOURSELF-JAVA.md" target="_blank" rel="noopener" class="rounded border-2 border-white/30 px-6 py-3 font-display font-bold transition hover:border-rooster hover:text-rooster">Try it yourself: Java</a>
+        <a href="https://github.com/leandrodalbo/claudio-plugin/blob/main/demos/typescript/TRY-IT-YOURSELF-TYPESCRIPT.md" target="_blank" rel="noopener" class="rounded border-2 border-white/30 px-6 py-3 font-display font-bold transition hover:border-rooster hover:text-rooster">Try it yourself: TypeScript</a>
+      </div>
     </div>
   </section>
 
@@ -559,16 +648,25 @@
       });
     });
 
-    const demoButtons = document.querySelectorAll('[data-demo]');
-    demoButtons.forEach(picked => picked.addEventListener('click', () => {
-      demoButtons.forEach(button => {
-        const isPicked = button === picked;
-        const video = document.getElementById('demo-' + button.dataset.demo);
-        button.setAttribute('aria-pressed', String(isPicked));
-        video.classList.toggle('hidden', !isPicked);
-        if (isPicked) { video.play(); } else { video.pause(); }
-      });
-    }));
+    // Language toggles: each [data-toggle] group switches the [data-panel]s of its own section.
+    // Videos in a hidden panel pause; in the shown panel only [data-autoplay] videos start.
+    document.querySelectorAll('[data-toggle]').forEach(group => {
+      const section = group.closest('section');
+      const buttons = group.querySelectorAll('[data-pick]');
+      buttons.forEach(picked => picked.addEventListener('click', () => {
+        buttons.forEach(button => button.setAttribute('aria-pressed', String(button === picked)));
+        section.querySelectorAll('[data-panel]').forEach(panel => {
+          const isShown = panel.dataset.panel === picked.dataset.pick;
+          panel.classList.toggle('hidden', !isShown);
+          const videos = panel.matches('video') ? [panel] : panel.querySelectorAll('video');
+          videos.forEach(video => {
+            if (!isShown) { video.pause(); return; }
+            // If the browser refuses to play, do nothing: the video's own controls let the visitor start it.
+            if (video.hasAttribute('data-autoplay')) { video.play().catch(() => {}); }
+          });
+        });
+      }));
+    });
 
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
