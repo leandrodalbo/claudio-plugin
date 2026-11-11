@@ -74,4 +74,4 @@ message.
 
 ## Still stuck?
 
-Ask on [Discord](https://discord.gg/AjyKgTbNtr).
+Ask on [Discord](https://discord.gg/pWBncFB4d).

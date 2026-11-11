@@ -72,7 +72,7 @@ Linux, macOS, and Windows through WSL. Details: [install](docs/install.md).
 
 ## Community
 
-- Questions: [Discord](https://discord.gg/AjyKgTbNtr)
+- Questions: [Discord](https://discord.gg/pWBncFB4d)
 - Bugs and ideas: [issues](https://github.com/leandrodalbo/claudio-plugin/issues/new/choose)
 - News: [X @claudioxpplugin](https://x.com/claudioxpplugin)
 - Help build it: [contributing](CONTRIBUTING.md) · [code of conduct](CODE_OF_CONDUCT.md) ·
