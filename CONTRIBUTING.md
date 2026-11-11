@@ -2,7 +2,7 @@
 
 Thanks for helping. ClaudioXP is built the XP way: small steps, tests first, feedback early.
 
-Questions? Ask on [Discord](https://discord.gg/AjyKgTbNtr). Please follow the
+Questions? Ask on [Discord](https://discord.gg/pWBncFB4d). Please follow the
 [code of conduct](CODE_OF_CONDUCT.md).
 
 ## What you need
