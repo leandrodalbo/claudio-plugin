@@ -19,7 +19,7 @@ mkdir -p ~/claudio-trial && cd ~/claudio-trial && git init
 ## 1. Install with the two commands
 
 ```bash
-claude plugin marketplace add ~/earn-the-day/claudio-plugin
+claude plugin marketplace add ~/firm-heart/will-not-slumber
 claude plugin install claudio@claudio-plugin
 ```
 
